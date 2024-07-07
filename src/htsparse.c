@@ -911,10 +911,10 @@ int htsparse(htsmoduleStruct * str, htsmoduleStructExtended * stre) {
                   char check_this_fking_line = 0;       // parsing code javascript..
                   char must_be_terminated = 0;  // caractère obligatoire de terminaison!
                   int token_size;
-
-                  if (!(token_size = strfield(html, ".writeln")))        // détection ...objet.write[ln]("code html")...
-                    token_size = strfield(html, ".write");
-                  if (token_size) {
+                  // !!.find a file name to look at
+                  if (!(token_size = strfield(html, ".writeln")))        // détection ...objet.write[ln]("code html")... !!. find a "writeln"
+                    token_size = strfield(html, ".write"); // !!. or a write
+                  if (token_size) { // !!. if anything was found, parse it
                     a = html + token_size;
                     while(is_realspace(*a))
                       a++;      // sauter espaces
@@ -924,18 +924,23 @@ int htsparse(htsmoduleStruct * str, htsmoduleStructExtended * stre) {
                       a++;      // sauter (
                     }
                   }
-                  // euhh ??? ???
-                  /* else if (strfield(adr,".href")) {  // détection ...objet.href="...
+                  // !!.was commented, lets see what it does
+                  // euhh ??? ??? !!.does not bode well. lmao
+                  // but it looks fine to me
+                  else if (strfield(adr,".href")) {  // détection ...objet.href="...
                      a=adr+5;
                      while(is_realspace(*a)) a++; // sauter espaces
-                     if (*a=='=') {  // ohh un égal
+                     if (*a=='=') {  // ohh un égal !!. does it check if it may be href==? ill change that
                      check_this_fking_line=1;  // à noter!
                      must_be_terminated=';';   // et si t'as oublié le ; tu sais pas coder
                      a++;   // sauter =
+                     if (*a=='=') {a++;} // !!. if theres another =, skip that too
+                     if (*a=='=') {a++;} // !!. fuck what if theres a third
                      }
 
-                     } */
+                     }
 
+                  // !!.actually parse the code
                   // on a un truc du genre instruction"code généré" dont on parse le code
                   if (check_this_fking_line) {
                     while(is_realspace(*a))
